@@ -6,12 +6,12 @@ This is a lost & found application that reads lost items from a file (e.g. PDF) 
 
 The project need to expose 4 endpoints, that can talk to database layer.
 
-| OPERATION | ENDPOINT        | DESCRIPTION                                                                                                                                                                                                                           |
-|-----------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| POST      | /lost-and-found | Upload & Store Data: A REST API Admin endpoint to upload the lost items with details from a file. The application should extract and store the following information from the uploaded file:LostItem:o ItemName: o Quantity: o Place: |
-| GET       | /lost-and-found | A REST API user endpoint to read the saved Lost Items                                                                                                                                                                                 |
-| POST      | /claims         | A REST API user endpoint for users to claim the lost item. User 1001 claimed certain items and certain quantities from the retreived list (2) and store them with their user id.                                                                                                                                                                           |
-| GET       | /claims         | A REST API Admin endpoint to read all the Lost items and Users (userId and name) associated with that.                                                                                                                                   | 
+| OPERATION | ENDPOINT       | DESCRIPTION                                                                                                                                                                                                                           |
+|-----------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| POST      | /lost-items    | Upload & Store Data: A REST API Admin endpoint to upload the lost items with details from a file. The application should extract and store the following information from the uploaded file:LostItem:o ItemName: o Quantity: o Place: |
+| GET       | /lost-items    | A REST API user endpoint to read the saved Lost Items                                                                                                                                                                                 |
+| POST      | /claims        | A REST API user endpoint for users to claim the lost item. User 1001 claimed certain items and certain quantities from the retreived list (2) and store them with their user id.                                                                                                                                                                           |
+| GET       | /claims        | A REST API Admin endpoint to read all the Lost items and Users (userId and name) associated with that.                                                                                                                                   | 
 
 ## Skill set used
 
@@ -53,13 +53,22 @@ postgres instance that is created.
 
 - 4. Mock Data
   User_details table have been prepared with the following data from the liquibase script.
-  ```
-  src/main/resources/db/changelog/changes/data/user-details.csv
+> src/main/resources/db/changelog/changes/data/user-details.csv
 
 
 ## WE ARE READY?
 
 let's start the microservice project, so by default it will start on the port localhost:8081 now!
+
+All the endpoints are secured using basic auth and users credentials is stored in-memory. Use the below credentials to access the endpoints.
+### Admin
+- username: admin
+- password: password
+- role: ADMIN
+### User
+- username: user
+- password: password
+- role: USER
 
 ## Swagger API
 

@@ -29,8 +29,7 @@ public class LostAndFoundProcessor {
 
     private static String getTextFromPdf(PDDocument document) throws IOException {
         PDFTextStripper pdfStripper = new PDFTextStripper();
-        String text = pdfStripper.getText(document);
-        return text;
+        return pdfStripper.getText(document);
     }
 
     private List<LostFound> extractItemDetails(String text) {

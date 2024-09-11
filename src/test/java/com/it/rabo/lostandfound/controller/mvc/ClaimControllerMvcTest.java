@@ -22,6 +22,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ClaimController.class)
@@ -46,16 +47,17 @@ public class ClaimControllerMvcTest {
     }
 
     @Test
-    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
-    void testGetClaims_withAdminRole() throws Exception {
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void get_all_claims_with_admin_role() throws Exception {
         Map<Long, List<ClaimsView>> claims = Map.of(1L, List.of(new ClaimsView(1L, "", 1L, 1L, "Laptop", "Airport")));
         when(claimRecordsService.getListOfClaims()).thenReturn(claims);
         mockMvc.perform(get("/claims"))
-                .andDo(print()).andExpect(status().isOk());
+                .andDo(print()).andExpect(status().isOk()).andExpect(content().string("{\"data\":{\"1\":[{\"userId\":1,\"userName\":\"\",\"quantity\":1,\"itemName\":\"Laptop\",\"place\":\"Airport\"}]},\"status\":200}"));
     }
 
     @Test
-    void testGetClaims_withoutAuthentication() throws Exception {
+
+    void get_all_claims_without_authorization() throws Exception {
         Map<Long, List<ClaimsView>> claims = Map.of(1L, List.of(new ClaimsView(1L, "", 1L, 1L, "Laptop", "Airport")));
         when(claimRecordsService.getListOfClaims()).thenReturn(claims);
         mockMvc.perform(get("/claims"))
@@ -63,14 +65,14 @@ public class ClaimControllerMvcTest {
     }
 
     @Test
-    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
-    void testUpdate_withClaimRequest() throws Exception {
+    @WithMockUser(username = "user")
+    void claim_lost_items() throws Exception {
         mockMvc.perform(post("/claims")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf())
                         .content("{\"userId\":1,\"lostItemId\":1,\"quantity\":1}"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andExpect(content().string("{\"message\":\"Claim is successful\",\"status\":201}"));
     }
 
 

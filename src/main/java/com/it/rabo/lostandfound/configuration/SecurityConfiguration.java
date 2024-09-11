@@ -23,17 +23,17 @@ public class SecurityConfiguration extends AbstractHttpConfigurer<SecurityConfig
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails admin = User.withUsername("ADMIN")
+        UserDetails admin = User.withUsername("admin")
                 .password(passwordEncoder().encode("password"))
                 .roles("ADMIN")
                 .build();
 
-        UserDetails user = User.withUsername("USER")
+        UserDetails user = User.withUsername("user")
                 .password(passwordEncoder().encode("password"))
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin);
+        return new InMemoryUserDetailsManager(admin,user);
     }
 
     @Bean

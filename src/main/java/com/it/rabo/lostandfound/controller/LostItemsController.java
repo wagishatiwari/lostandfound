@@ -4,8 +4,6 @@ import com.it.rabo.lostandfound.controller.response.ApiResponse;
 import com.it.rabo.lostandfound.model.LostItemsView;
 import com.it.rabo.lostandfound.service.LostItemsService;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -34,20 +31,18 @@ public class LostItemsController {
     }
 
     @GetMapping("")
-    public ApiResponse<List<LostItemsView>> getLostFound() {
-        return new ApiResponse<>(lostItemsService.getAllLostAndFoundDetails().stream().map(LostItemsView::of).toList(),
-                HttpStatus.OK.value());
+    public ApiResponse getLostFound() {
+        return ApiResponse.of(lostItemsService.getAllLostAndFoundDetails().stream().map(LostItemsView::of).toList());
     }
 
     @PostMapping("")
-    public ApiResponse<Void> upload(@RequestParam("file") MultipartFile file) throws IOException {
+    public ApiResponse upload(@RequestParam("file") MultipartFile file) throws IOException {
         throwExceptionIfNoFileFound(file);
         lostItemsService.updateLostAndFoundDetails(convertMultipartToFile(file));
-        return new ApiResponse<>("File uploaded successfully", HttpStatus.CREATED.value());
+        return ApiResponse.of("File uploaded successfully");
     }
 
     private static File convertMultipartToFile(MultipartFile file) throws IOException {
-
         Path tempDir = Files.createTempDirectory("");
         Path tempFile = tempDir.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), tempFile);
