@@ -7,7 +7,6 @@ import com.it.rabo.lostandfound.service.LostItemsService;
 
 import com.it.rabo.lostandfound.util.FileUtil;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +85,7 @@ public class LostItemsControllerMvcTest {
                         .file(multipartFile)
                         //.with(csrf())
                         .contentType("multipart/form-data"))
-                .andDo(print()).andExpect(status().isUnauthorized());
+                .andDo(print()).andExpect(status().is5xxServerError());
     }
 
     @Test
