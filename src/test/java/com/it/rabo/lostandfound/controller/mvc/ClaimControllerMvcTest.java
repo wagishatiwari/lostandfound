@@ -1,5 +1,6 @@
 package com.it.rabo.lostandfound.controller.mvc;
 
+import com.it.rabo.lostandfound.configuration.SecurityConfiguration;
 import com.it.rabo.lostandfound.controller.ClaimController;
 import com.it.rabo.lostandfound.entity.LostFound;
 import com.it.rabo.lostandfound.model.ClaimsView;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ClaimController.class)
+@Import(SecurityConfiguration.class)
 public class ClaimControllerMvcTest {
 
     @Mock

@@ -1,5 +1,6 @@
 package com.it.rabo.lostandfound.controller.mvc;
 
+import com.it.rabo.lostandfound.configuration.SecurityConfiguration;
 import com.it.rabo.lostandfound.controller.LostItemsController;
 import com.it.rabo.lostandfound.entity.LostFound;
 import com.it.rabo.lostandfound.service.LostItemsService;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LostItemsController.class)
+@Import(SecurityConfiguration.class)
 public class LostItemsControllerMvcTest {
 
     @Mock
@@ -70,20 +73,18 @@ public class LostItemsControllerMvcTest {
         MockMultipartFile multipartFile = new MockMultipartFile("file", "LostItems.pdf", "application/pdf", new FileInputStream(file));
         mockMvc.perform(multipart("/lost-items")
                         .file(multipartFile)
-                        .with(csrf())
                         .contentType("multipart/form-data"))
                 .andExpect(status().isOk()).andExpect(content().string("{\"message\":\"File uploaded successfully\",\"status\":201}"));
     }
 
     @Test
-    @Disabled
     @WithMockUser(username = "user")
     void claim_lost_items_with_no_role() throws Exception {
         File file = FileUtil.getFileFromResource("LostItems.pdf");
         MockMultipartFile multipartFile = new MockMultipartFile("file", "LostItems.pdf", "application/pdf", new FileInputStream(file));
         mockMvc.perform(multipart("/lost-items")
                         .file(multipartFile)
-                        .with(csrf())
+                        //.with(csrf())
                         .contentType("multipart/form-data"))
                 .andDo(print()).andExpect(status().isUnauthorized());
     }
