@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:11.6
+    container_name: lost-and-found-db
+    restart: always
+    environment:
+      POSTGRES_USER: lafdbuser
+      POSTGRES_PASSWORD: lafdbpassword
+      POSTGRES_DB: db-lost-and-found
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data-laf:/var/lib/postgresql/data
+volumes:
+  pg-data-laf:

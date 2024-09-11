@@ -1,0 +1,89 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet author="wagisha.tiwari" id="create-table-lost-and-found" >
+        <createTable tableName="lost_items"
+                     remarks="data related to the knowledge sharing">
+            <column name="id" type="BIGSERIAL" autoIncrement="true" incrementBy="1"
+                    remarks="Unique identifier number for table">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="item_name" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="place" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <!--AUDIT COLUMNS - END -->
+        </createTable>
+
+        <createIndex indexName="LAF_IDX" tableName="lost_items" unique="false">
+            <column name="id"/>
+        </createIndex>
+        <createSequence
+                sequenceName="S_LAF_SEQUENCE"
+                startValue="1"
+                incrementBy="1"
+                minValue="1"
+                maxValue="9223372036854775806"
+                cacheSize="20"
+                cycle="false"/>
+
+        <createTable tableName="user_details"
+                     remarks="data related to the user of the system">
+            <column name="id" type="BIGSERIAL" autoIncrement="true" incrementBy="1"
+                    remarks="Unique identifier number for table">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createSequence
+                sequenceName="S_UD_SEQUENCE"
+                startValue="1"
+                incrementBy="1"
+                minValue="1"
+                maxValue="9223372036854775806"
+                cacheSize="20"
+                cycle="false"/>
+        <createTable tableName="claimed_items"
+                     remarks="data related to the knowledge sharing">
+            <column name="id" type="BIGSERIAL" autoIncrement="true" incrementBy="1"
+                    remarks="Unique identifier number for table">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="lost_item_id" type="BIGSERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGSERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="claimed_items" columnNames="lost_item_id, user_id" constraintName="unique_lost_item_user"/>
+        <addForeignKeyConstraint baseTableName="claimed_items" baseColumnNames="lost_item_id"
+                                 constraintName="CI_LI_FK"
+                                 referencedTableName="lost_items" referencedColumnNames="ID" onDelete="RESTRICT"/>
+        <addForeignKeyConstraint baseTableName="claimed_items" baseColumnNames="user_id"
+                                 constraintName="CI_UD_FK"
+                                 referencedTableName="user_details" referencedColumnNames="ID" onDelete="RESTRICT"/>
+        <createSequence
+                sequenceName="S_CR_SEQUENCE"
+                startValue="1"
+                incrementBy="1"
+                minValue="1"
+                maxValue="9223372036854775806"
+                cacheSize="20"
+                cycle="false"/>
+    </changeSet>
+</databaseChangeLog>
