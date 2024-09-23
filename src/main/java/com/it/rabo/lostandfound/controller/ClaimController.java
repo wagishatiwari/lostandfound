@@ -23,13 +23,13 @@ public class ClaimController {
     }
 
     @GetMapping("")
-    @RolesAllowed("ROLE_ADMIN")
+    @RolesAllowed("ADMIN")
     public ApiResponse getClaims() {
         return ApiResponse.of(claimRecordsService.getListOfClaims());
     }
 
     @PostMapping("")
-    @RolesAllowed("ROLE_USER")
+    @RolesAllowed("USER")
     public ApiResponse saveClaims(@Valid @RequestBody ClaimsRequest claimsRequest) {
         claimRecordsService.saveClaim(claimsRequest.userId(), claimsRequest.lostItemId(), claimsRequest.quantity());
         return ApiResponse.of("Claim is successful");

@@ -65,26 +65,25 @@ public class ClaimControllerITTest {
     static void afterAll() {
         postgreSQLContainer.stop();
     }
-    @BeforeEach
-    public void setUp() {
 
+
+    @Test
+    public void getAllClaimList() {
         request = with()
                 .auth()
                 .basic("ADMIN", "password")
                 .port(port);
-    }
-
-    @Test
-    @Disabled("Disabled for now as it is failing with 500 error(GroovyRuntime could not access constructor:). Need to investigate further.")
-    public void getAllClaimList() {
         String url = "http://localhost:" + port + "/claims";
         response = request.when().get(url);
         response.then().statusCode(200);
 
     }
-    @Disabled("Disabled for now as it is failing with 500 error(GroovyRuntime could not access constructor:). Need to investigate further.")
     @Test
     public void saveClaimLostItem() {
+        request = with()
+                .auth()
+                .basic("USER", "password")
+                .port(port);
         lostAndFoundRepository.save(new LostFound("LAPTOP",2,"Airport"));
         String url = "http://localhost:" + port + "/claims";
         response = request
